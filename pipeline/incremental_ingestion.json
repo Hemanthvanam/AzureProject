@@ -102,10 +102,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "bronze",
-							"folder": {
-								"value": "@pipeline().parameters.table",
-								"type": "Expression"
-							},
+							"folder": "DimUser",
 							"file": {
 								"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
 								"type": "Expression"
@@ -126,7 +123,7 @@
 				"typeProperties": {
 					"variableName": "current",
 					"value": {
-						"value": "@formatDateTime(utcNow(),'yyyyMMddHHmmss')",
+						"value": "@utcNow()",
 						"type": "Expression"
 					}
 				}
