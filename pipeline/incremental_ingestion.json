@@ -67,7 +67,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "@concat(\n 'SELECT * FROM ',\n pipeline().parameters.schema,\n '.',\n pipeline().parameters.table,\n ' WHERE ',\n pipeline().parameters.cdc_col,\n ' > ''',\n activity('last_cdc').output.value[0].cdc,\n ''''\n)\n",
+						"sqlReaderQuery": {
+							"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table}  where @{pipeline().parameters.cdc_col}>'@{if(empty(pipeline().parameters.from_date),activity('last_cdc').output.value[0].cdc,pipeline().parameters.from_date)}",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -172,7 +175,7 @@
 											"type": "Expression"
 										},
 										"file": {
-											"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where @{pipeline().parameters.cdc_col}>@{activity('last_cdc').output.value[0].cdc}",
+											"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
 											"type": "Expression"
 										}
 									}
@@ -302,6 +305,9 @@
 				"type": "string"
 			},
 			"cdc_col": {
+				"type": "string"
+			},
+			"from_date": {
 				"type": "string"
 			}
 		},
