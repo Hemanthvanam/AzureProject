@@ -171,7 +171,10 @@
 											"value": "@pipeline().parameters.table",
 											"type": "Expression"
 										},
-										"file": "@concat(  'SELECT * FROM ',  pipeline().parameters.schema,  '.',  pipeline().parameters.table,  ' WHERE ',  pipeline().parameters.cdc_col,  ' > ''',  activity('last_cdc').output.value[0].cdc,  '''' )"
+										"file": {
+											"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where @{pipeline().parameters.cdc_col}>@{activity('last_cdc').output.value[0].cdc}",
+											"type": "Expression"
+										}
 									}
 								},
 								"enableLogging": false,
